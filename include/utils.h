@@ -74,9 +74,14 @@ void write_CSV(const char *filename, QLearningAgent *agent);
 
 void read_CSV(const char *filename, QLearningAgent *agent);
 
-double atod(char *str);
+double atod(const char *str);
 
-void load(int nrows, int ncols, char ***csv, QLearningAgent *agent);
+void load(
+    const int nrows, 
+    const int ncols, 
+    const char ***csv, 
+    QLearningAgent *agent
+);
 
 char **split(char *str, const char *delimiter);
 

@@ -303,12 +303,17 @@ void read_CSV(const char *filename, QLearningAgent *agent) {
     fclose(file);
 }
 
-double atod(char *str) {
+double atod(const char *str) {
     char *endptr;
     return strtod(str, &endptr);
 }
 
-void load(int nrows, int ncols, char ***csv, QLearningAgent *agent) {
+void load(
+    const int nrows, 
+    const int ncols, 
+    const char ***csv, 
+    QLearningAgent *agent
+) {
     int *keys = realloc(agent -> keys, nrows * sizeof(int));
     if (!keys) {
         free_QLearningAgent(agent);
