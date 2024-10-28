@@ -1,6 +1,6 @@
 # snake_qlearning
 
-`snake_qlearning` is a project that use the [Q-Learning](https://en.wikipedia.org/wiki/Q-learning) algorithm to ensure that the snake plays the game most efficiently. Q-Learning is one of the reinforcement learning algorithms and aims to help a snake learn the most appropriate movements while collecting rewards (points) and avoiding obstacles (walls or its own tail) on the playing field.
+`snake_qlearning` is a project that uses the [Q-Learning](https://en.wikipedia.org/wiki/Q-learning) algorithm to ensure that the snake plays the game most efficiently. Q-Learning is one of the reinforcement learning algorithms and aims to help a snake learn the most appropriate movements while collecting rewards (points) and avoiding obstacles (walls or its own tail) on the playing field.
 
 ## Setup
 
