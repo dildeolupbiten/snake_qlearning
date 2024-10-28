@@ -79,7 +79,7 @@ double atod(const char *str);
 void load(
     const int nrows, 
     const int ncols, 
-    const char ***csv, 
+    char ***csv, 
     QLearningAgent *agent
 );
 
