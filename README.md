@@ -19,16 +19,7 @@ make
 
 ### Run
 ```
-./snake_qlearning \
-    learning_rate=.1 \
-    discount_factor=.9 \
-    max_exploration_rate=1 \
-    min_exploration_rate=.01 \
-    exploration_decay=.998 \
-    width=10 \
-    height=10 \
-    episodes=1000000 \
-    table_size=2000000
+./snake_qlearning
 ```
 
 ### Output
