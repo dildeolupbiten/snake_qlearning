@@ -1,40 +1,76 @@
 #include "../include/grid.h"
+#include "../include/utils.h"
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
-int **init_grid(const int width, const int height) {
-    int **grid = malloc(width * sizeof(int *));
+grid_t *init_grid(const size_t size) {
+    grid_t *grid = malloc(sizeof(grid_t));
     if (!grid) {
         printf("Memory allocation failed.");
-        return NULL;
+        exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < width; i++) {
-        grid[i] = malloc(height * sizeof(int));
-        if (!grid[i]) {
-            for (int j = 0; j < i; j++) {
-                free(grid[j]);
+    grid -> keys = malloc(size * sizeof(int *));
+    if (!grid -> keys) {
+        free(grid);
+        printf("Memory allocation failed.");
+        exit(EXIT_FAILURE);
+    }
+    grid -> values = malloc(size * sizeof(char **));
+    if (!grid -> values) {
+        free(grid -> keys);
+        free(grid);
+        printf("Memory allocation failed.");
+        exit(EXIT_FAILURE);
+    }
+    for (size_t row = 0; row < size; row++) {
+        grid -> keys[row] = malloc(size * sizeof(int));
+        grid -> values[row] = malloc(size * sizeof(char *));
+        if (!grid -> keys[row]) {
+            for (size_t r = 0; r < row; r++) {
+                free(grid -> keys[r]);
             }
+            free(grid -> values);
+            free(grid -> keys);
             free(grid);
             printf("Memory allocation failed.");
-            return NULL;
+            exit(EXIT_FAILURE);
         }
-        memset(grid[i], 0, height * sizeof(int));
     }
+    grid -> size = size;
     return grid;
 }
 
-void reset_grid(const int width, const int height, int **grid) {
-    for (int i = 0; i < width; i++) {
-        memset(grid[i], 0, height * sizeof(int));
+void reset_grid(grid_t *grid) {
+    int value = 0;
+    for (size_t row = 0; row < grid -> size; row++) {
+        set(grid -> keys[row], &value, sizeof(int), grid -> size);
+        for (size_t col = 0; col < grid -> size; col++) {
+            grid -> values[row][col] = BLACK_CUBE;
+        }
     }
-    grid[1][1] = 1; // The starting position of the snake
+    grid -> result = "";
+    grid -> keys[1][1] = 1;
+    grid -> values[1][1] = RED_CUBE;
 }
 
-void free_grid(int **grid, const int width) {
-    for (int i = 0; i < width; i++) {
-        free(grid[i]);
+void free_grid(grid_t *grid) {
+    for (size_t row = 0; row < grid -> size; row++) {
+        free(grid -> keys[row]);
+        free(grid -> values[row]);
     }
+    free(grid -> keys);
+    free(grid -> values);
     free(grid);
 }
 
+void print_grid(grid_t *grid) {
+    printf("%s\n", MOVE_CURSOR_TO_TOP);
+    for (size_t row = 0; row < grid -> size; row++) {
+        for (size_t col = 0; col < grid -> size; col++) {
+            printf("%s ", grid -> values[row][col]);
+            if (col == grid -> size - 1 && row == grid -> size / 2) {
+                printf("%s", grid -> result);
+            }
+        }
+        printf("\n");
+    }
+}

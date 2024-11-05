@@ -3,8 +3,7 @@
 
 void init_random();
 
-int random_int(int n);
-
-double random_double();
+int randrange(const int start, const int end);
 
 #endif // RANDOM_H
+
