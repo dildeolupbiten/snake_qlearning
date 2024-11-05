@@ -17,23 +17,6 @@ cd snake_qlearning
 make
 ```
 
-## Usage
-
-### Arguments
-
-| Argument               | Description                                                                                                   |
-|------------------------|---------------------------------------------------------------------------------------------------------------|
-| **learning_rate**      | The rate at which the snake learns by updating its Q-values (suggested range: 0.1 - 0.5).                    |
-| **discount_factor**    | The factor that discounts future rewards, balancing immediate vs. long-term rewards (e.g., 0.9).             |
-| **max_exploration_rate** | The initial probability of exploring (choosing random actions) rather than exploiting learned knowledge.     |
-| **min_exploration_rate** | The minimum exploration rate to prevent the snake from getting stuck with limited actions.                    |
-| **exploration_decay**  | The rate at which exploration decreases over time, helping the snake to settle on learned strategies.        |
-| **width**              | The width of the game board.                                                                                 |
-| **height**             | The height of the game board.                                                                                |
-| **episodes**           | The number of episodes (games) for training the snake to optimize its performance.                           |
-| **table_size**         | The size of the Q-table to store state-action pairs for learned behaviors.                                   |
-
-
 ### Run
 ```
 ./snake_qlearning \
