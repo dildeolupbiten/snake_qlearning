@@ -7,13 +7,9 @@ int main () {
     
     double learning_rate = .1;
     double discount_factor = .9;
-    double exploration_rate = .5;
     long episodes = 1000000000;
-
     int key_size = 100000000;
     int grid_size = 10;
-    
-    int sleep_sec = 100000;
 
     grid_t *grid = init_grid(grid_size);
     snake_t *snake = init_snake(grid_size);
@@ -27,11 +23,9 @@ int main () {
         snake,
         grid,
         agent, 
-        exploration_rate, 
         learning_rate,
         discount_factor, 
-        episodes,
-        sleep_sec
+        episodes
     );
     
     save_agent("agent.dat", agent);
@@ -39,5 +33,6 @@ int main () {
     free_grid(grid);
     free_snake(snake);
     free_agent(agent);
+    return 0;
 }
 

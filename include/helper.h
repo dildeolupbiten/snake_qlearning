@@ -39,8 +39,7 @@ void update_q_value(
 
 char *get_result(
     const double avg_success,
-    const double avg_reward, 
-    const double exploration_rate,
+    const double avg_reward,
     const int episode
 );
 
@@ -48,11 +47,9 @@ void train_snake(
     snake_t *snake,
     grid_t *grid,
     agent_t *agent, 
-    double exploration_rate,
     double learning_rate,
     const double discount_factor, 
-    const long episodes,
-    int sleep_sec
+    const long episodes
 );
 
 #endif // HELPER_H

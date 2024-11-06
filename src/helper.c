@@ -194,22 +194,19 @@ void update_q_value(
 char *get_result(
     const double avg_success,
     const double avg_reward, 
-    const double exploration_rate,
     const int episode
 ) {
     char *result;
     int length = snprintf(
         NULL, 
         0, 
-        "%s%d %s%.2f %s%.2f %s%.2f", 
+        "%s%d %s%.2f %s%.2f", 
         "Episode: ",
         episode + 1,
         "Avg. success: ",
         avg_success,
         "Avg. reward: ",
-        avg_reward,
-        "Exp. rate: ",
-        exploration_rate
+        avg_reward
     );
     length += 1;
     result = (char *)malloc(length);
@@ -217,15 +214,13 @@ char *get_result(
         snprintf(
             result, 
             length, 
-            "%s%d %s%.2f %s%.2f %s%.2f", 
+            "%s%d %s%.2f %s%.2f", 
             "Episode: ",
             episode + 1,
             "Avg. success: ",
             avg_success,
             "Avg. reward: ",
-            avg_reward,
-            "Exp. rate: ",
-            exploration_rate
+            avg_reward
         );
     } else {
         printf("Memory allocation failed.\n");
@@ -238,11 +233,9 @@ void train_snake(
     snake_t *snake,
     grid_t *grid,
     agent_t *agent, 
-    double exploration_rate, 
     double learning_rate,
     const double discount_factor, 
-    const long episodes,
-    int sleep_sec
+    const long episodes
 ) {
     printf("%s\n", CLEAR);
     long avg_reward = 0;
@@ -281,11 +274,10 @@ void train_snake(
                 grid -> result = get_result(
                     total_success,
                     total_reward,
-                    exploration_rate,
                     episode                    
                 );
                 print_grid(grid);
-                usleep(sleep_sec);
+                usleep(100000);
             }
         }
         avg_success += total_success;
