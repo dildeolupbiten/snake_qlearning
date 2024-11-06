@@ -10,3 +10,7 @@ int randrange(const int start, const int end) {
     return start + (rand() % (end - start));
 }
 
+double uniform() {
+    return (double)rand() / RAND_MAX;
+}
+

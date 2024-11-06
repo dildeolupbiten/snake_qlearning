@@ -7,7 +7,13 @@
 
 int get_valid_moves(State valid_moves[4], snake_t *snake, grid_t *grid);
 
-void choose_move(State *move, snake_t *snake, grid_t *grid, agent_t *agent);
+void choose_move(
+    State *move, 
+    snake_t *snake, 
+    grid_t *grid, 
+    agent_t *agent,
+    const double exploration_rate
+);
 
 int penalty_for_nearby_obstacles(snake_t *snake, grid_t *grid);
 
@@ -40,6 +46,7 @@ void update_q_value(
 char *get_result(
     const double avg_success,
     const double avg_reward,
+    const double exploration_rate,
     const int episode
 );
 
@@ -48,7 +55,9 @@ void train_snake(
     grid_t *grid,
     agent_t *agent, 
     double learning_rate,
-    const double discount_factor, 
+    const double discount_factor,
+    double exploration_rate,
+    const double exploration_decay,
     const long episodes
 );
 

@@ -7,6 +7,8 @@ int main () {
     
     double learning_rate = .1;
     double discount_factor = .9;
+    double exploration_rate = 1;
+    double exploration_decay = .999999;
     long episodes = 1000000000;
     int key_size = 100000000;
     int grid_size = 10;
@@ -24,7 +26,9 @@ int main () {
         grid,
         agent, 
         learning_rate,
-        discount_factor, 
+        discount_factor,
+        exploration_rate,
+        exploration_decay,
         episodes
     );
     

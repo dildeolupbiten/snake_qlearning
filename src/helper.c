@@ -23,9 +23,15 @@ int get_valid_moves(State valid_moves[4], snake_t *snake, grid_t *grid) {
     return len;
 }
 
-void choose_move(State *move, snake_t *snake, grid_t *grid, agent_t *agent) {
+void choose_move(
+    State *move, 
+    snake_t *snake, 
+    grid_t *grid, 
+    agent_t *agent,
+    const double exploration_rate
+) {
     State random_move;
-    if (randrange(0, 2) == 0) {
+    if (exploration_rate > uniform()) {
         State valid_moves[4];
         int len = get_valid_moves(valid_moves, snake, grid);
         if (!len) {
@@ -119,8 +125,8 @@ int step(const State move, snake_t *snake, grid_t *grid) {
             snake -> success = 0;
             reward += -5;
         }
-        reward += penalty_for_nearby_obstacles(snake, grid);
-        reward += bonus_for_closeness_to_target(snake);
+        //reward += penalty_for_nearby_obstacles(snake, grid);
+        //reward += bonus_for_closeness_to_target(snake);
     } else {
         reward -= 200;
         snake -> done = 1;
@@ -192,20 +198,23 @@ void update_q_value(
 
 char *get_result(
     const double avg_success,
-    const double avg_reward, 
+    const double avg_reward,
+    const double exploration_rate,
     const int episode
 ) {
     char *result;
     int length = snprintf(
         NULL, 
         0, 
-        "%s%d %s%.2f %s%.2f", 
+        "%s%d %s%.2f %s%.2f %s%.2f", 
         "Episode: ",
         episode + 1,
         "Avg. success: ",
         avg_success,
         "Avg. reward: ",
-        avg_reward
+        avg_reward,
+        "Exploration rate: ",
+        exploration_rate
     );
     length += 1;
     result = (char *)malloc(length);
@@ -213,13 +222,15 @@ char *get_result(
         snprintf(
             result, 
             length, 
-            "%s%d %s%.2f %s%.2f", 
+            "%s%d %s%.2f %s%.2f %s%.2f", 
             "Episode: ",
             episode + 1,
             "Avg. success: ",
             avg_success,
             "Avg. reward: ",
-            avg_reward
+            avg_reward,
+            "Exploration rate: ",
+            exploration_rate
         );
     } else {
         printf("Memory allocation failed.\n");
@@ -233,7 +244,9 @@ void train_snake(
     grid_t *grid,
     agent_t *agent, 
     double learning_rate,
-    const double discount_factor, 
+    const double discount_factor,
+    double exploration_rate,
+    double exploration_decay,
     const long episodes
 ) {
     printf("%s\n", CLEAR);
@@ -246,7 +259,7 @@ void train_snake(
         State move = {0, 0};
         while (!snake -> done) {
             int reward = 0;
-            choose_move(&move, snake, grid, agent);
+            choose_move(&move, snake, grid, agent, exploration_rate);
             if (move.x == -1 && move.y == -1) {
                 snake -> done = 1;
                 reward -= 100;
@@ -273,7 +286,8 @@ void train_snake(
                 grid -> result = get_result(
                     total_success,
                     total_reward,
-                    episode                    
+                    exploration_rate,
+                    episode                
                 );
                 print_grid(grid);
                 usleep(100000);
@@ -282,11 +296,13 @@ void train_snake(
         avg_success += total_success;
         avg_reward += total_reward;
         printf(
-            "Episode: %ld, Avg. success: %f, Avg. reward: %f\n", 
+            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Exploration rate: %f\n", 
             episode, 
             (double)avg_success / (episode + 1), 
-            (double)avg_reward / (episode + 1)
+            (double)avg_reward / (episode + 1),
+            exploration_rate
         );
+        exploration_rate *= exploration_decay;
     }
 }
 
