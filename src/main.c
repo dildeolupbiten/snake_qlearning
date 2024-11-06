@@ -7,10 +7,10 @@ int main () {
     
     double learning_rate = .3;
     double learning_decay = .9999999;
-    double discount_factor = .95;
+    double discount_factor = .9;
     double epsilon = .05;
-    long episodes = 1000000000;
-    int key_size = 100000000;
+    long episodes = 100000000;
+    int key_size = 140000000;
     int grid_size = 10;
 
     grid_t *grid = init_grid(grid_size);

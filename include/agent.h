@@ -7,6 +7,7 @@ typedef struct {
     int *keys;
     double (*values)[4];
     size_t size;
+    size_t count;
 } agent_t;
 
 agent_t *init_agent(const size_t size);

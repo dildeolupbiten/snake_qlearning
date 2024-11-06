@@ -45,6 +45,7 @@ void choose_move(
         move -> y = random_move.y;
     } else {
         int key = get_key(snake -> target, snake -> body, snake -> size, agent);
+        init_key(key, agent);
         size_t size = sizeof(double);
         size_t dims[1] = {4};
         double max_q = *((double *)max(agent -> values[key], size, dims, 1));
@@ -172,12 +173,14 @@ void update_q_value(
         current_size, 
         agent
     );
+    init_key(current_key, agent);
     int next_key = get_key(
         snake -> target, 
         snake -> body, 
         snake -> size, 
         agent
     );
+    init_key(next_key, agent);
     int index = move_index(move);
     double max_next_q = *((double *)max(
         agent -> values[next_key], 
@@ -296,10 +299,16 @@ void train_snake(
         avg_success += total_success;
         avg_reward += total_reward;
         printf(
-            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Learning rate: %f\n", 
-            episode, 
-            (double)avg_success / (episode + 1), 
+            "%s%ld, %s%f, %s%f, %s%f, %s%f\n", 
+            "Episode: ",
+            episode,
+            "Key / Episode: ",
+            (double)agent -> count / episode,
+            "Avg. success: ",
+            (double)avg_success / (episode + 1),
+            "Avg. reward: ",
             (double)avg_reward / (episode + 1),
+            "Learning rate: ",
             learning_rate
         );
         learning_rate *= learning_decay;

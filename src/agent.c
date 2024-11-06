@@ -22,6 +22,7 @@ agent_t *init_agent(const size_t size) {
         exit(EXIT_FAILURE);
     }
     agent -> size = size;
+    agent -> count = 0;
     return agent;
 }
 
@@ -89,6 +90,7 @@ int get_key(
 void init_key(const int key, agent_t *agent) {
     if (!agent -> keys[key % agent -> size]) {
         agent -> keys[key % agent -> size] = 1;
+        agent -> count += 1;
     }
 }
 
