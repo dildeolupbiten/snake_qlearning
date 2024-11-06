@@ -12,7 +12,7 @@ void choose_move(
     snake_t *snake, 
     grid_t *grid, 
     agent_t *agent,
-    const double exploration_rate
+    const double epsilon
 );
 
 int penalty_for_nearby_obstacles(snake_t *snake, grid_t *grid);
@@ -46,7 +46,6 @@ void update_q_value(
 char *get_result(
     const double avg_success,
     const double avg_reward,
-    const double exploration_rate,
     const double learning_rate,
     const int episode
 );
@@ -58,8 +57,7 @@ void train_snake(
     double learning_rate,
     const double learning_decay,
     const double discount_factor,
-    double exploration_rate,
-    const double exploration_decay,
+    const double epsilon,
     const long episodes
 );
 

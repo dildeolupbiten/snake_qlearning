@@ -28,10 +28,10 @@ void choose_move(
     snake_t *snake, 
     grid_t *grid, 
     agent_t *agent,
-    const double exploration_rate
+    const double epsilon
 ) {
     State random_move;
-    if (exploration_rate > uniform()) {
+    if (uniform() < epsilon) {
         State valid_moves[4];
         int len = get_valid_moves(valid_moves, snake, grid);
         if (!len) {
@@ -119,14 +119,14 @@ int step(const State move, snake_t *snake, grid_t *grid) {
             grid -> values[snake -> target.x][snake -> target.y] = BLACK_CUBE;
             set_target(snake, grid);
             snake -> success += 1;
-            reward += 200;
+            reward += 300;
         } else {
             decrease_snake(snake, grid);
             snake -> success = 0;
             reward += -5;
         }
-        //reward += penalty_for_nearby_obstacles(snake, grid);
-        //reward += bonus_for_closeness_to_target(snake);
+        reward += penalty_for_nearby_obstacles(snake, grid);
+        reward += bonus_for_closeness_to_target(snake);
     } else {
         reward -= 200;
         snake -> done = 1;
@@ -199,7 +199,6 @@ void update_q_value(
 char *get_result(
     const double avg_success,
     const double avg_reward,
-    const double exploration_rate,
     const double learning_rate,
     const int episode
 ) {
@@ -207,15 +206,13 @@ char *get_result(
     int length = snprintf(
         NULL, 
         0, 
-        "%s%d %s%.2f %s%.2f %s%.2f %s%.2f", 
+        "%s%d %s%.2f %s%.2f %s%.2f", 
         "Episode: ",
         episode + 1,
         "Avg. success: ",
         avg_success,
         "Avg. reward: ",
         avg_reward,
-        "Exploration rate: ",
-        exploration_rate,
         "Learning rate: ",
         learning_rate
     );
@@ -225,15 +222,13 @@ char *get_result(
         snprintf(
             result, 
             length, 
-            "%s%d %s%.2f %s%.2f %s%.2f %s%.2f", 
+            "%s%d %s%.2f %s%.2f %s%.2f", 
             "Episode: ",
             episode + 1,
             "Avg. success: ",
             avg_success,
             "Avg. reward: ",
             avg_reward,
-            "Exploration rate: ",
-            exploration_rate,
             "Learning rate: ",
             learning_rate
         );
@@ -251,8 +246,7 @@ void train_snake(
     double learning_rate,
     const double learning_decay,
     const double discount_factor,
-    double exploration_rate,
-    const double exploration_decay,
+    const double epsilon,
     const long episodes
 ) {
     printf("%s\n", CLEAR);
@@ -265,7 +259,7 @@ void train_snake(
         State move = {0, 0};
         while (!snake -> done) {
             int reward = 0;
-            choose_move(&move, snake, grid, agent, exploration_rate);
+            choose_move(&move, snake, grid, agent, epsilon);
             if (move.x == -1 && move.y == -1) {
                 snake -> done = 1;
                 reward -= 100;
@@ -292,7 +286,6 @@ void train_snake(
                 grid -> result = get_result(
                     total_success,
                     total_reward,
-                    exploration_rate,
                     learning_rate,
                     episode                
                 );
@@ -303,14 +296,12 @@ void train_snake(
         avg_success += total_success;
         avg_reward += total_reward;
         printf(
-            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Exploration rate: %f Learning rate: %f\n", 
+            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Learning rate: %f\n", 
             episode, 
             (double)avg_success / (episode + 1), 
             (double)avg_reward / (episode + 1),
-            exploration_rate,
             learning_rate
         );
-        exploration_rate *= exploration_decay;
         learning_rate *= learning_decay;
     }
 }

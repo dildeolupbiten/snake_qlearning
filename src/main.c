@@ -5,11 +5,10 @@
 int main () {
     init_random();
     
-    double learning_rate = .1;
-    double learning_decay = .99999999;
-    double discount_factor = .9;
-    double exploration_rate = 1;
-    double exploration_decay = .999999;
+    double learning_rate = .3;
+    double learning_decay = .9999999;
+    double discount_factor = .95;
+    double epsilon = .05;
     long episodes = 1000000000;
     int key_size = 100000000;
     int grid_size = 10;
@@ -29,8 +28,7 @@ int main () {
         learning_rate,
         learning_decay,
         discount_factor,
-        exploration_rate,
-        exploration_decay,
+        epsilon,
         episodes
     );
     
