@@ -47,6 +47,7 @@ char *get_result(
     const double avg_success,
     const double avg_reward,
     const double exploration_rate,
+    const double learning_rate,
     const int episode
 );
 
@@ -55,6 +56,7 @@ void train_snake(
     grid_t *grid,
     agent_t *agent, 
     double learning_rate,
+    const double learning_decay,
     const double discount_factor,
     double exploration_rate,
     const double exploration_decay,

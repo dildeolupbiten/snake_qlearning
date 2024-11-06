@@ -6,6 +6,7 @@ int main () {
     init_random();
     
     double learning_rate = .1;
+    double learning_decay = .99999999;
     double discount_factor = .9;
     double exploration_rate = 1;
     double exploration_decay = .999999;
@@ -26,6 +27,7 @@ int main () {
         grid,
         agent, 
         learning_rate,
+        learning_decay,
         discount_factor,
         exploration_rate,
         exploration_decay,

@@ -200,13 +200,14 @@ char *get_result(
     const double avg_success,
     const double avg_reward,
     const double exploration_rate,
+    const double learning_rate,
     const int episode
 ) {
     char *result;
     int length = snprintf(
         NULL, 
         0, 
-        "%s%d %s%.2f %s%.2f %s%.2f", 
+        "%s%d %s%.2f %s%.2f %s%.2f %s%.2f", 
         "Episode: ",
         episode + 1,
         "Avg. success: ",
@@ -214,7 +215,9 @@ char *get_result(
         "Avg. reward: ",
         avg_reward,
         "Exploration rate: ",
-        exploration_rate
+        exploration_rate,
+        "Learning rate: ",
+        learning_rate
     );
     length += 1;
     result = (char *)malloc(length);
@@ -222,7 +225,7 @@ char *get_result(
         snprintf(
             result, 
             length, 
-            "%s%d %s%.2f %s%.2f %s%.2f", 
+            "%s%d %s%.2f %s%.2f %s%.2f %s%.2f", 
             "Episode: ",
             episode + 1,
             "Avg. success: ",
@@ -230,7 +233,9 @@ char *get_result(
             "Avg. reward: ",
             avg_reward,
             "Exploration rate: ",
-            exploration_rate
+            exploration_rate,
+            "Learning rate: ",
+            learning_rate
         );
     } else {
         printf("Memory allocation failed.\n");
@@ -244,9 +249,10 @@ void train_snake(
     grid_t *grid,
     agent_t *agent, 
     double learning_rate,
+    const double learning_decay,
     const double discount_factor,
     double exploration_rate,
-    double exploration_decay,
+    const double exploration_decay,
     const long episodes
 ) {
     printf("%s\n", CLEAR);
@@ -287,6 +293,7 @@ void train_snake(
                     total_success,
                     total_reward,
                     exploration_rate,
+                    learning_rate,
                     episode                
                 );
                 print_grid(grid);
@@ -296,13 +303,15 @@ void train_snake(
         avg_success += total_success;
         avg_reward += total_reward;
         printf(
-            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Exploration rate: %f\n", 
+            "Episode: %ld, Avg. success: %f, Avg. reward: %f, Exploration rate: %f Learning rate: %f\n", 
             episode, 
             (double)avg_success / (episode + 1), 
             (double)avg_reward / (episode + 1),
-            exploration_rate
+            exploration_rate,
+            learning_rate
         );
         exploration_rate *= exploration_decay;
+        learning_rate *= learning_decay;
     }
 }
 
