@@ -25,8 +25,7 @@ int get_valid_moves(State valid_moves[4], snake_t *snake, grid_t *grid) {
 
 void choose_move(State *move, snake_t *snake, grid_t *grid, agent_t *agent) {
     State random_move;
-    int random_choose = randrange(0, 2);
-    if (random_choose == 0) {
+    if (randrange(0, 2) == 0) {
         State valid_moves[4];
         int len = get_valid_moves(valid_moves, snake, grid);
         if (!len) {
