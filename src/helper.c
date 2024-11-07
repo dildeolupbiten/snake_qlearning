@@ -67,13 +67,13 @@ int penalty_for_nearby_obstacles(snake_t *snake, grid_t *grid) {
     int y = snake -> body[0].y;
     int penalty = 0;
     if (x > 0 && grid -> keys[x - 1][y] != 0) { 
-        penalty -= 5; 
+        penalty -= 10; 
     }
     if (x < (int)grid -> size - 1 && grid -> keys[x + 1][y] != 0) {
         penalty -= 10;
     }
     if (y > 0 && grid -> keys[x][y - 1] != 0) {
-        penalty -= 5;
+        penalty -= 10;
     }
     if (y < (int)grid -> size - 1 && grid -> keys[x][y + 1] != 0) {
         penalty -= 10;
