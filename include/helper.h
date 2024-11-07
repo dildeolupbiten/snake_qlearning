@@ -19,6 +19,8 @@ int penalty_for_nearby_obstacles(snake_t *snake, grid_t *grid);
 
 int bonus_for_closeness_to_target(snake_t *snake);
 
+int penalty_for_long_distance(State next_state, snake_t *snake);
+
 int step(const State move, snake_t *snake, grid_t *grid);
 
 double q_algorithm(

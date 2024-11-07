@@ -66,25 +66,45 @@ int penalty_for_nearby_obstacles(snake_t *snake, grid_t *grid) {
     int x = snake -> body[0].x;
     int y = snake -> body[0].y;
     int penalty = 0;
-    if (x > 0 && grid -> keys[x - 1][y] != 0) { penalty -= 5; }
-    if (x < (int)grid -> size - 1 && grid -> keys[x + 1][y] != 0) penalty -= 10;
-    if (y > 0 && grid -> keys[x][y - 1] != 0) penalty -= 5;
-    if (y < (int)grid -> size - 1 && grid->keys[x][y + 1] != 0) penalty -= 10;
+    if (x > 0 && grid -> keys[x - 1][y] != 0) { 
+        penalty -= 5; 
+    }
+    if (x < (int)grid -> size - 1 && grid -> keys[x + 1][y] != 0) {
+        penalty -= 10;
+    }
+    if (y > 0 && grid -> keys[x][y - 1] != 0) {
+        penalty -= 5;
+    }
+    if (y < (int)grid -> size - 1 && grid -> keys[x][y + 1] != 0) {
+        penalty -= 10;
+    }
     return penalty;
 }
 
 int bonus_for_closeness_to_target(snake_t *snake) {
-    int distance_to_target = abs(
-        snake -> body[0].x - snake->target.x) 
-        + 
-        abs(snake->body[0].y - snake->target.y
-    );
-    if (distance_to_target == 1) {
+    int x = abs(snake -> body[0].x - snake -> target.x);
+    int y = abs(snake -> body[0].y - snake -> target.y);
+    int distance = x + y;
+    if (distance == 1) {
         return 10;
-    } else if (distance_to_target == 2) {
+    } else if (distance == 2) {
         return 5;
     }
     return 0;
+}
+
+int penalty_for_long_distance(State next_state, snake_t *snake) {
+    int old_distance = 0;
+    old_distance += abs(snake -> body[0].x - snake -> target.x);
+    old_distance += abs(snake -> body[0].y - snake -> target.y);
+    int new_distance = 0;
+    new_distance += abs(next_state.x - snake -> target.x);
+    new_distance += abs(next_state.y - snake -> target.y);
+    if (new_distance < old_distance) {
+        return 10;
+    } else {
+        return -10;
+    }
 }
 
 int step(const State move, snake_t *snake, grid_t *grid) {
@@ -93,17 +113,7 @@ int step(const State move, snake_t *snake, grid_t *grid) {
         move.y + snake -> body[0].y
     };
     int reward = 0;
-    int old_distance = 0;
-    old_distance += abs(snake -> body[0].x - snake -> target.x);
-    old_distance += abs(snake -> body[0].y - snake -> target.y);
-    int new_distance = 0;
-    new_distance += abs(next_state.x - snake -> target.x);
-    new_distance += abs(next_state.y - snake -> target.y);
-    if (new_distance < old_distance) {
-        reward += 10;
-    } else {
-        reward -= 10;
-    }
+    reward += penalty_for_long_distance(next_state, snake);
     if (
         0 <= next_state.x && next_state.x < (int)grid -> size
         && 
