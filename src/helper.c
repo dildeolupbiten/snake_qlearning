@@ -250,7 +250,7 @@ void train_snake(
     const double learning_decay,
     const double discount_factor,
     const double epsilon,
-    const long episodes
+    const int episodes
 ) {
     printf("%s\n", CLEAR);
     long avg_reward = 0;

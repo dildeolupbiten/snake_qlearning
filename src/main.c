@@ -9,8 +9,8 @@ int main () {
     double learning_decay = .9999999;
     double discount_factor = .9;
     double epsilon = .05;
-    long episodes = 100000000;
-    int key_size = 140000000;
+    int episodes = 100000000;
+    int key_size = 100000000;
     int grid_size = 10;
 
     grid_t *grid = init_grid(grid_size);

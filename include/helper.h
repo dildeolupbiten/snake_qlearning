@@ -58,7 +58,7 @@ void train_snake(
     const double learning_decay,
     const double discount_factor,
     const double epsilon,
-    const long episodes
+    const int episodes
 );
 
 #endif // HELPER_H
